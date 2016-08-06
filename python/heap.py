@@ -60,13 +60,19 @@ class Heap:
                     child1=self.nodes[(1+index)*2-1]
                     child2=self.nodes[(index+1)*2]
                 else: #Or maybe make a get_value in this class, inheriting objects
-                    child1=self.nodes[(1+index)*2-1].get_value()
-                    child2=self.nodes[(index+1)*2].get_value()
+                    child1=self.nodes[(1+index)*2-1].value
+                    child2=self.nodes[(index+1)*2].value
                 if child1<child2: #repurposed to use values of objects if not int,float
                     minc=(index+1)*2-1
                 else:
                     minc=(index+1)*2
-            if self.nodes[index]>self.nodes[minc]:
+            if isinstance(self.nodes[0],int) or isinstance(self.nodes[0],float):
+                idxval=self.nodes[index]
+                mincval=self.nodes[minc]
+            else:
+                idxval=self.nodes[index].value
+                mincval=self.nodes[minc].value
+            if idxval>mincval:
                 tmp=self.nodes[index]
                 self.nodes[index]=self.nodes[minc]
                 self.nodes[minc]=tmp

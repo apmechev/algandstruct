@@ -67,20 +67,31 @@ def do_a_dijkstra(G,root):
     print "inserted all points of G in h"
     print ""
     while len(h.nodes)>1:
-        u=h.extractmin()
+        print [i.v_id for i in h.nodes] 
+        print 'heap is ',[i.value for i in h.nodes] #OOPS, needs heapify!
+        m=h.extractmin()
 
         print 'heap is ',[i.value for i in h.nodes] #OOPS, needs heapify!
         print [i.v_id for i in h.nodes]
-        print "min vertex is ", u.v_id, "with ",len(u.edges), "edges"
-        print 'edges of u are ',[[e.u.v_id,e.v.v_id,e.d] for e in u.edges]
-        
-        for E in u.edges:
-            if (E.v in h.nodes) and E.v.value>u.value+E.d:
-                E.v.value=u.value+E.d
+        print "min vertex is ", m.v_id, "with ",len(m.edges), "edges"
+        print 'edges of u are ',[[e.u.v_id,e.v.v_id,e.d] for e in m.edges]
+        ##Only works for directed graphs, otherwise would have to match 
+        for E in m.edges:
+            if (E.v in h.nodes) and E.v.value>m.value+E.d:
+                E.v.value=m.value+E.d
                 print "edge of u to", E.v.v_id,v.value, "with heap index ",h.nodes.index(E.v)
                 h.check_parent(h.nodes.index(E.v)) 
                 print [i.value for i in h.nodes] #OOPS, needs heapify!
                 print [i.v_id for i in h.nodes]
+#        for E in v.edges:#for edge ENDING in v
+#            if (E.u in h.nodes) and E.u.value>v.value+E.d:
+#                E.u.value=v.value+E.d
+#                print "edge of u to", E.v.v_id,v.value, "with heap index ",h.nodes.index(E.v)
+#                h.check_parent(h.nodes.index(E.u)) 
+#                print [i.value for i in h.nodes] #OOPS, needs heapify!
+#                print [i.v_id for i in h.nodes]
+
+        
         print ""
 
 g1=graph.Graph()
@@ -93,23 +104,41 @@ v5=graph.Vertex(5)
 v6=graph.Vertex(6)
 v7=graph.Vertex(7)
 v8=graph.Vertex(8)
+v9=graph.Vertex(9)
+v10=graph.Vertex(10)
 
-v0.addedge(graph.Edge(v0,v1,4,4))
-v0.addedge(graph.Edge(v0,v7,8,8))
-v1.addedge(graph.Edge(v1,v2,8,8))
-v1.addedge(graph.Edge(v1,v7,11,11))
-v2.addedge(graph.Edge(v2,v3,7,7))
-v2.addedge(graph.Edge(v2,v8,2,2))
-v2.addedge(graph.Edge(v2,v5,4,4))
-v3.addedge(graph.Edge(v3,v4,9,9))
-v3.addedge(graph.Edge(v3,v5,14,14))
-v4.addedge(graph.Edge(v4,v5,10,10))
-v5.addedge(graph.Edge(v5,v6,2,2))
-v6.addedge(graph.Edge(v6,v7,1,1))
-v6.addedge(graph.Edge(v6,v8,6,6))
-v7.addedge(graph.Edge(v7,v8,7,7))
+#UNDIRECTED Test case (won't efficiently work with heap (NOT IMPLEMENTED CORRECTLY ))
+#v0.addedge(graph.Edge(v0,v1,4,4))
+#v0.addedge(graph.Edge(v0,v7,8,8))
+#v1.addedge(graph.Edge(v1,v2,8,8))
+#v1.addedge(graph.Edge(v1,v7,11,11))
+#v2.addedge(graph.Edge(v2,v3,7,7))
+#v2.addedge(graph.Edge(v2,v8,2,2))
+#v2.addedge(graph.Edge(v2,v5,4,4))
+#v3.addedge(graph.Edge(v3,v4,9,9))
+#v3.addedge(graph.Edge(v3,v5,14,14))
+#v4.addedge(graph.Edge(v4,v5,10,10))
+#v5.addedge(graph.Edge(v5,v6,2,2))
+#v6.addedge(graph.Edge(v6,v7,1,1))
+#v6.addedge(graph.Edge(v6,v8,6,6))
+#v7.addedge(graph.Edge(v7,v8,7,7))
 
-g1.addvertices(v0)
+#Directed test case
+v1.addedge(graph.Edge(v1,v2,2,2))
+v1.addedge(graph.Edge(v1,v3,20,20))
+v2.addedge(graph.Edge(v2,v4,3,3))
+v4.addedge(graph.Edge(v4,v5,0,0))
+v5.addedge(graph.Edge(v5,v6,6,6))
+v6.addedge(graph.Edge(v6,v3,2,2))
+v5.addedge(graph.Edge(v5,v7,4,4))
+v5.addedge(graph.Edge(v5,v8,1,1))
+v7.addedge(graph.Edge(v7,v6,1,1))
+v7.addedge(graph.Edge(v7,v5,2,2))
+v8.addedge(graph.Edge(v8,v9,7,7))
+v9.addedge(graph.Edge(v9,v10,5,5))
+v10.addedge(graph.Edge(v10,v8,0,0))
+
+#g1.addvertices(v0)
 g1.addvertices(v1)
 g1.addvertices(v2)
 g1.addvertices(v3)
@@ -118,7 +147,11 @@ g1.addvertices(v5)
 g1.addvertices(v6)
 g1.addvertices(v7)
 g1.addvertices(v8)
+g1.addvertices(v9)
+g1.addvertices(v10)
 
-do_a_dijkstra(g1,v0)
+do_a_dijkstra(g1,v1)
 for v in g1.vertices:
-    print v.value
+    print v.value, v.v_id
+
+
