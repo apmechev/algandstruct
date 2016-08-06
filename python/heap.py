@@ -33,7 +33,13 @@ class Heap:
             p_index=loc/2-1
         if p_index<0:
             p_index=0
-        if self.nodes[loc].get_value()<self.nodes[p_index].get_value():
+        if isinstance(self.nodes[0],int) or isinstance(self.nodes[0],float):
+            loc_val=self.nodes[loc]
+            p_val=self.nodes[p_index]
+        else:
+            loc_val=self.nodes[loc].get_value()
+            p_val=self.nodes[p_index].get_value()
+        if loc_val<p_val:
             tmp=self.nodes[loc]
             self.nodes[loc]=self.nodes[p_index]
             self.nodes[p_index]=tmp

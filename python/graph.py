@@ -1,17 +1,14 @@
 class Vertex:
-    def __init__(self,v_id=-1,edges=[],value=float('inf')):
+    def __init__(self,v_id=-1):
         self.v_id=v_id
-        self.edges=edges
-        self.value=value #the distance value of the vertex from source v
-    def addedge(self,E):
-        self.edges.append(E)
-    def get_shortest_edge():
-        pass
+        self.edges=[]
+    def addedge(self,E):#Why does this add to all Vs?
+         self.edges.append(E)
     def get_value(self):
-        if len(self.edges)>0: #temporary test, will return value otherwise
-            return self.edges[0].get_value()
-        else:
-            return self.value
+#        if len(self.edges)>0: #temporary test, will return value otherwise
+#            return self.edges[0].get_value()
+#        else:
+         return self.value
 
 
 class Edge:
@@ -35,11 +32,10 @@ class Graph:
             self.edges=[]
 
     def addedges(self,V):
-        for edge in V.edges():
-            self.edges.append([E.u,E.v,e.d,e.d1])
+        for E in V.edges:##Need to append not values u,v but instances where E.u=v.v_id
+            self.edges.append([E.u,E.v,E.d,E.d1])
 
     def addvertices(self,V):
         if not V.v_id in self.vertices:
             self.vertices.append(V)
         self.addedges(V)
-
