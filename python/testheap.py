@@ -1,19 +1,19 @@
 import heap
 import random
+from random import randint
 n=heap.Heap()
-num=1000
-
-for i in range(num):
-    n.insert(random.uniform(0,num))
+num_items=10
+for i in range(num_items):
+    n.insert(random.uniform(0,100))
 sorted1=[]
 
-print "Done inserting"
-for i in range(num):
+print "Done Inserting"
+for i in range(num_items):
     sorted1.append(n.extractmin())
-
+    if i%1000==0:
+        print ".",
 print "Done extracting"
-
-for i in range(num-1):
+for i in range(num_items-1):
     if sorted1[i+1]<sorted1[i]:
-        print "ERRRORRR"+str(i)
-
+        print "ERRRORRR"
+print sorted1

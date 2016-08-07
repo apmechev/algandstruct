@@ -197,7 +197,7 @@ def Bellman_Ford(g,v0):
 
 
     for i in range(len(g.vertices)-1):#change to numvert
-        if i%100: print i
+
         for v in range(len(g.vertices)):
             prev=A[v]
             for e in g.edges:
@@ -213,10 +213,53 @@ def Bellman_Ford(g,v0):
 
 
 #do_a_dijkstra(g1,vs[1])
-print len(vs)
-BF=Bellman_Ford(g1,vs[1])
+#print len(vs)
+#BF=Bellman_Ford(g1,vs[1])
+def re_weigh(g,p_v):
+    gp=graph.Graph()
+    for e in g.edges:
+        e[2]=e[3]+p_v[e[0].v_id]-p_v[e[1].v_id]
+    return g
 
-for v in g1.vertices:
-    print v.value, BF[v.v_id-1],v.v_id
+def de_weigh(g,p_v):
+    for e in g.edges:
+        e[3]=e[2]-p_v[e[0].v_id]+p_v[e[1].v_id]
+        e[2]=e[3]
+    return g
+#for v in g1.vertices:
+#    print v.value, BF[v.v_id-1],v.v_id
 
+def Johnson(infile):
+    g=graph.Graph()
+    vs=grow_a_graph(g,infile)
+    v0=graph.Vertex(0)
+    ix=0
+    for i in range(len(vs)):
+        print ix
+        ix+=1
+        v0.addedge(graph.Edge(v0,vs[i],0,0))
+    for e in v0.edges:
+        print "v0 has edge to", e.v.v_id," with len ",e.d
+    vs=[v0]+vs[1:]
 
+    for i in range(len(vs)): 
+        g.addvertices(vs[i])
+    p_v=Bellman_Ford(g,vs[0])
+
+    print p_v
+    g.edges=g.edges[len(g.vertices[0].edges):]
+    g.vertices=g.vertices[1:] #remove artificial zero vertex
+    gw=re_weigh(g,p_v)
+    for e in gw.edges:
+        print e[0].v_id,"->",e[1].v_id,"was",e[3],"now is",e[2]
+    results=[]
+    for v in gw.vertices:
+        gp=gw
+        do_a_dijkstra(gp,v)
+        gp=de_weigh(gp,p_v)
+        results.append([v.value for v in gp.vertices])
+    print results
+    print min([min(x) for x in results])
+
+Johnson("/home/apmechev/MOOCS/Algo2/s4/g3.txt")
+Johnson("test.txt")
