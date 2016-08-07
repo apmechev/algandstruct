@@ -52,8 +52,31 @@ Vertices=[]
 #   if v in minheap AND v.value > u.value+E(u,v).d:
 #       v.value=u.value+E(u,v).d
 def grow_a_graph(G,filename):
-    G=graph.Graph
-    
+    G=graph.Graph()
+    with open(filename,'r') as gfile:
+        lines = gfile.readlines()
+    verts=lines[0].strip().split()[0]
+    contents=[]
+    for i in range(len(lines)):
+        contents.append([int(n) for n in lines[i].strip().split()])
+    print contents[0:10]
+
+    vert_objs=[]
+    vert_objs.append(graph.Vertex(0))#v0 used in BF
+    print verts
+    for i in range(1,int(verts)+1):
+        vert_objs.append(graph.Vertex(i))
+
+    j=1#current vertex (assumes the input file is sorted by tail vertex)
+    for i in range(1,len(contents)):
+        if contents[i][0]==vert_objs[j].v_id:
+            vert_objs[j].addedge(graph.Edge(vert_objs[j],vert_objs[contents[i][1]],int(contents[i][2]),int(contents[i][2])))
+            
+        else:
+            j+=1
+            vert_objs[j].addedge(graph.Edge(vert_objs[j],vert_objs[contents[i][1]],int(contents[i][2]),int(contents[i][2])))
+    return vert_objs
+
 def do_a_dijkstra(G,root):
     root.value=0
     h=heap.Heap(root)
@@ -62,39 +85,38 @@ def do_a_dijkstra(G,root):
             continue
         v.value=float('inf')
         h.insert(v)
-#test insertion in heap first
-    print [i.value for i in h.nodes]
-    print "inserted all points of G in h"
-    print ""
+
+#    print [i.value for i in h.nodes]
+#    print "inserted all points of G in h"
+#    print ""
     while len(h.nodes)>1:
-        print [i.v_id for i in h.nodes] 
-        print 'heap is ',[i.value for i in h.nodes] #OOPS, needs heapify!
+ #       print [i.v_id for i in h.nodes] 
+ #       print 'heap is ',[i.value for i in h.nodes] #OOPS, needs heapify!
         m=h.extractmin()
 
-        print 'heap is ',[i.value for i in h.nodes] #OOPS, needs heapify!
-        print [i.v_id for i in h.nodes]
-        print "min vertex is ", m.v_id, "with ",len(m.edges), "edges"
-        print 'edges of u are ',[[e.u.v_id,e.v.v_id,e.d] for e in m.edges]
+#        print 'heap is ',[i.value for i in h.nodes] #OOPS, needs heapify!
+#        print [i.v_id for i in h.nodes]
+#        print "min vertex is ", m.v_id, "with ",len(m.edges), "edges"
+#        print 'edges of u are ',[[e.u.v_id,e.v.v_id,e.d] for e in m.edges]
         ##Only works for directed graphs, otherwise would have to match 
         for E in m.edges:
             if (E.v in h.nodes) and E.v.value>m.value+E.d:
                 E.v.value=m.value+E.d
-                print "edge of u to", E.v.v_id,v.value, "with heap index ",h.nodes.index(E.v)
-                h.check_parent(h.nodes.index(E.v)) 
-                print [i.value for i in h.nodes] #OOPS, needs heapify!
-                print [i.v_id for i in h.nodes]
-#        for E in v.edges:#for edge ENDING in v
-#            if (E.u in h.nodes) and E.u.value>v.value+E.d:
-#                E.u.value=v.value+E.d
 #                print "edge of u to", E.v.v_id,v.value, "with heap index ",h.nodes.index(E.v)
-#                h.check_parent(h.nodes.index(E.u)) 
-#                print [i.value for i in h.nodes] #OOPS, needs heapify!
-#                print [i.v_id for i in h.nodes]
-
-        
-        print ""
+                h.check_parent(h.nodes.index(E.v)) 
+#                print [i.value for i in h.nodes] 
+#                print [i.v_id for i in h.nodes] 
+        print ".",
 
 g1=graph.Graph()
+g2=graph.Graph()
+vs=grow_a_graph(g1,"/home/apmechev/MOOCS/Algo2/s4/g1.txt")
+#vs=grow_a_graph(g1,"test.txt")
+g1.addvertices(graph.Vertex(0))
+for i in range(1,len(vs)):
+    g1.addvertices(vs[i])
+
+
 v0=graph.Vertex(0)
 v1=graph.Vertex(1)
 v2=graph.Vertex(2)
@@ -106,52 +128,95 @@ v7=graph.Vertex(7)
 v8=graph.Vertex(8)
 v9=graph.Vertex(9)
 v10=graph.Vertex(10)
+#
+##UNDIRECTED Test case (won't efficiently work with heap (NOT IMPLEMENTED CORRECTLY ))
+v0.addedge(graph.Edge(v0,v1,4,4))
+v0.addedge(graph.Edge(v0,v7,8,8))
+v1.addedge(graph.Edge(v1,v2,8,8))
+v1.addedge(graph.Edge(v1,v7,11,11))
+v2.addedge(graph.Edge(v2,v3,7,7))
+v2.addedge(graph.Edge(v2,v8,2,2))
+v2.addedge(graph.Edge(v2,v5,4,4))
+v3.addedge(graph.Edge(v3,v4,9,9))
+v3.addedge(graph.Edge(v3,v5,14,14))
+v4.addedge(graph.Edge(v4,v5,10,10))
+v5.addedge(graph.Edge(v5,v6,2,2))
+v6.addedge(graph.Edge(v6,v7,1,1))
+v6.addedge(graph.Edge(v6,v8,6,6))
+v7.addedge(graph.Edge(v7,v8,7,7))
+#
+##Directed test case
+#v0.addedge(graph.Edge(v0,v1,3,3))
+#v0.addedge(graph.Edge(v0,v2,4,4))
+#v1.addedge(graph.Edge(v1,v2,6,6))
+#v1.addedge(graph.Edge(v1,v4,7,7))
+#v1.addedge(graph.Edge(v1,v3,2,2))
+#v2.addedge(graph.Edge(v2,v4,5,5))
+#v3.addedge(graph.Edge(v3,v4,1,1))
+#v3.addedge(graph.Edge(v3,v5,8,8))
+#v4.addedge(graph.Edge(v4,v5,4,4))
+#
+##Another directed case
+##v1.addedge(graph.Edge(v1,v2,2,2))
+##v1.addedge(graph.Edge(v1,v3,20,20))
+##v2.addedge(graph.Edge(v2,v4,3,3))
+##v4.addedge(graph.Edge(v4,v5,0,0))
+##v5.addedge(graph.Edge(v5,v6,6,6))
+##v6.addedge(graph.Edge(v6,v3,2,2))
+##v5.addedge(graph.Edge(v5,v7,4,4))
+##v5.addedge(graph.Edge(v5,v8,1,1))
+##v7.addedge(graph.Edge(v7,v6,1,1))
+##v7.addedge(graph.Edge(v7,v5,2,2))
+##v8.addedge(graph.Edge(v8,v9,7,7))
+##v9.addedge(graph.Edge(v9,v10,5,5))
+##v10.addedge(graph.Edge(v10,v8,0,0))
+#
+##another directed test case
+g2.addvertices(v0)
+g2.addvertices(v1)
+g2.addvertices(v2)
+g2.addvertices(v3)
+g2.addvertices(v4)
+g2.addvertices(v5)
+g2.addvertices(v6)
+g2.addvertices(v7)
+g2.addvertices(v8)
+##g1.addvertices(v9)
+##g1.addvertices(v10)
 
-#UNDIRECTED Test case (won't efficiently work with heap (NOT IMPLEMENTED CORRECTLY ))
-#v0.addedge(graph.Edge(v0,v1,4,4))
-#v0.addedge(graph.Edge(v0,v7,8,8))
-#v1.addedge(graph.Edge(v1,v2,8,8))
-#v1.addedge(graph.Edge(v1,v7,11,11))
-#v2.addedge(graph.Edge(v2,v3,7,7))
-#v2.addedge(graph.Edge(v2,v8,2,2))
-#v2.addedge(graph.Edge(v2,v5,4,4))
-#v3.addedge(graph.Edge(v3,v4,9,9))
-#v3.addedge(graph.Edge(v3,v5,14,14))
-#v4.addedge(graph.Edge(v4,v5,10,10))
-#v5.addedge(graph.Edge(v5,v6,2,2))
-#v6.addedge(graph.Edge(v6,v7,1,1))
-#v6.addedge(graph.Edge(v6,v8,6,6))
-#v7.addedge(graph.Edge(v7,v8,7,7))
+import numpy as np
+def Bellman_Ford(g,v0):
+    n_ver=len(g.vertices)
+    A=np.zeros(n_ver)
+    A.fill(float('inf'))
+    A[v0.v_id]=0
+    B=np.zeros(n_ver) 
+    B.fill(float('inf'))
+    B[v0.v_id]=0
+    #Initialized all distances to inf, except distance of vs to itself
 
-#Directed test case
-v1.addedge(graph.Edge(v1,v2,2,2))
-v1.addedge(graph.Edge(v1,v3,20,20))
-v2.addedge(graph.Edge(v2,v4,3,3))
-v4.addedge(graph.Edge(v4,v5,0,0))
-v5.addedge(graph.Edge(v5,v6,6,6))
-v6.addedge(graph.Edge(v6,v3,2,2))
-v5.addedge(graph.Edge(v5,v7,4,4))
-v5.addedge(graph.Edge(v5,v8,1,1))
-v7.addedge(graph.Edge(v7,v6,1,1))
-v7.addedge(graph.Edge(v7,v5,2,2))
-v8.addedge(graph.Edge(v8,v9,7,7))
-v9.addedge(graph.Edge(v9,v10,5,5))
-v10.addedge(graph.Edge(v10,v8,0,0))
 
-#g1.addvertices(v0)
-g1.addvertices(v1)
-g1.addvertices(v2)
-g1.addvertices(v3)
-g1.addvertices(v4)
-g1.addvertices(v5)
-g1.addvertices(v6)
-g1.addvertices(v7)
-g1.addvertices(v8)
-g1.addvertices(v9)
-g1.addvertices(v10)
+    for i in range(len(g.vertices)-1):#change to numvert
+        if i%100: print i
+        for v in range(len(g.vertices)):
+            prev=A[v]
+            for e in g.edges:
+                if v !=e[1].v_id:
+                    continue
+                if prev > A[e[0].v_id]+e[2]:
+                    B[v]=A[e[0].v_id]+e[2]
+                else:
+                    B[v]=A[v]
+                A=list(B) 
+    return A
 
-do_a_dijkstra(g1,v1)
+
+
+#do_a_dijkstra(g1,vs[1])
+print len(vs)
+BF=Bellman_Ford(g1,vs[1])
+
 for v in g1.vertices:
-    print v.value, v.v_id
+    print v.value, BF[v.v_id-1],v.v_id
 
 
