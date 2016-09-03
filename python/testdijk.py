@@ -85,27 +85,13 @@ def do_a_dijkstra(G,root):
             continue
         v.value=float('inf')
         h.insert(v)
-
-#    print [i.value for i in h.nodes]
-#    print "inserted all points of G in h"
-#    print ""
     while len(h.nodes)>1:
- #       print [i.v_id for i in h.nodes] 
- #       print 'heap is ',[i.value for i in h.nodes] #OOPS, needs heapify!
         m=h.extractmin()
-
-#        print 'heap is ',[i.value for i in h.nodes] #OOPS, needs heapify!
-#        print [i.v_id for i in h.nodes]
-#        print "min vertex is ", m.v_id, "with ",len(m.edges), "edges"
-#        print 'edges of u are ',[[e.u.v_id,e.v.v_id,e.d] for e in m.edges]
         ##Only works for directed graphs, otherwise would have to match 
         for E in m.edges:
             if (E.v in h.nodes) and E.v.value>m.value+E.d:
                 E.v.value=m.value+E.d
-#                print "edge of u to", E.v.v_id,v.value, "with heap index ",h.nodes.index(E.v)
                 h.check_parent(h.nodes.index(E.v)) 
-#                print [i.value for i in h.nodes] 
-#                print [i.v_id for i in h.nodes] 
         print ".",
 
 g1=graph.Graph()
@@ -194,10 +180,7 @@ def Bellman_Ford(g,v0):
     B.fill(float('inf'))
     B[v0.v_id]=0
     #Initialized all distances to inf, except distance of vs to itself
-
-
     for i in range(len(g.vertices)-1):#change to numvert
-
         for v in range(len(g.vertices)):
             prev=A[v]
             for e in g.edges:
@@ -212,9 +195,7 @@ def Bellman_Ford(g,v0):
 
 
 
-#do_a_dijkstra(g1,vs[1])
-#print len(vs)
-#BF=Bellman_Ford(g1,vs[1])
+
 def re_weigh(g,p_v):
     gp=graph.Graph()
     for e in g.edges:
