@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import subprocess
 import numpy as np      #np.arange
+import matplotlib.pyplot as plt
 def plot_bif(x0,rmin,rmax,rstep,n,k):
     '''
     x0=the starting x point
@@ -8,11 +9,21 @@ def plot_bif(x0,rmin,rmax,rstep,n,k):
     n=number of iterations for each r,
     k=number of points to discard at the beginning
     '''
+    rs=[]
+    ys=[]
     for r in np.arange(rmin,rmax,rstep):
         i=k
         while i<n:
             x=subprocess.Popen( ["../../c++/logistic",str(x0),str(r),str(i)] ,stdout=subprocess.PIPE).communicate()
-            print(r,float(x[0].strip('\n')))
-            i+=1
+            output=x[0].decode()
+            y=float(output)
+            rs.append(r)
+            ys.append(y)
 
-plot_bif(0.4,1.0,3.9,0.01,131,100)
+            i+=1
+    plt.scatter(rs,ys,s=1,c='k',alpha=0.5)
+    plt.title("Bifurication plot of the Logistics map, varying R")
+    plt.xlabel("R")
+    plt.ylabel("Attractor")
+    plt.show()
+plot_bif(0.2,2.4,4.5,0.001,1000,805)
