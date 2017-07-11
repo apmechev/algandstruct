@@ -1,5 +1,5 @@
-import graph
-import heap
+from graph import graph
+from heap import heap
 
 Vs=[1,2,3,4]
 us=[1,1,2,2,3]
@@ -65,16 +65,16 @@ def grow_a_graph(G,filename):
     vert_objs.append(graph.Vertex(0))#v0 used in BF
     print verts
     for i in range(1,int(verts)+1):
-        vert_objs.append(graph.Vertex(i))
+        vert_objs.append(vertex.Vertex(i))
 
     j=1#current vertex (assumes the input file is sorted by tail vertex)
     for i in range(1,len(contents)):
         if contents[i][0]==vert_objs[j].v_id:
-            vert_objs[j].addedge(graph.Edge(vert_objs[j],vert_objs[contents[i][1]],int(contents[i][2]),int(contents[i][2])))
+            vert_objs[j].addedge(edge.Edge(vert_objs[j],vert_objs[contents[i][1]],int(contents[i][2]),int(contents[i][2])))
             
         else:
             j+=1
-            vert_objs[j].addedge(graph.Edge(vert_objs[j],vert_objs[contents[i][1]],int(contents[i][2]),int(contents[i][2])))
+            vert_objs[j].addedge(edge.Edge(vert_objs[j],vert_objs[contents[i][1]],int(contents[i][2]),int(contents[i][2])))
     return vert_objs
 
 def do_a_dijkstra(G,root):
@@ -98,38 +98,38 @@ g1=graph.Graph()
 g2=graph.Graph()
 vs=grow_a_graph(g1,"/home/apmechev/MOOCS/Algo2/s4/g1.txt")
 #vs=grow_a_graph(g1,"test.txt")
-g1.addvertices(graph.Vertex(0))
+g1.addvertices(vertex.Vertex(0))
 for i in range(1,len(vs)):
     g1.addvertices(vs[i])
 
 
-v0=graph.Vertex(0)
-v1=graph.Vertex(1)
-v2=graph.Vertex(2)
-v3=graph.Vertex(3)
-v4=graph.Vertex(4)
-v5=graph.Vertex(5)
-v6=graph.Vertex(6)
-v7=graph.Vertex(7)
-v8=graph.Vertex(8)
-v9=graph.Vertex(9)
-v10=graph.Vertex(10)
+v0=vertex.Vertex(0)
+v1=vertex.Vertex(1)
+v2=vertex.Vertex(2)
+v3=vertex.Vertex(3)
+v4=vertex.Vertex(4)
+v5=vertex.Vertex(5)
+v6=vertex.Vertex(6)
+v7=vertex.Vertex(7)
+v8=vertex.Vertex(8)
+v9=vertex.Vertex(9)
+v10=vertex.Vertex(10)
 #
 ##UNDIRECTED Test case (won't efficiently work with heap (NOT IMPLEMENTED CORRECTLY ))
-v0.addedge(graph.Edge(v0,v1,4,4))
-v0.addedge(graph.Edge(v0,v7,8,8))
-v1.addedge(graph.Edge(v1,v2,8,8))
-v1.addedge(graph.Edge(v1,v7,11,11))
-v2.addedge(graph.Edge(v2,v3,7,7))
-v2.addedge(graph.Edge(v2,v8,2,2))
-v2.addedge(graph.Edge(v2,v5,4,4))
-v3.addedge(graph.Edge(v3,v4,9,9))
-v3.addedge(graph.Edge(v3,v5,14,14))
-v4.addedge(graph.Edge(v4,v5,10,10))
-v5.addedge(graph.Edge(v5,v6,2,2))
-v6.addedge(graph.Edge(v6,v7,1,1))
-v6.addedge(graph.Edge(v6,v8,6,6))
-v7.addedge(graph.Edge(v7,v8,7,7))
+v0.addedge(edge.Edge(v0,v1,4,4))
+v0.addedge(edge.Edge(v0,v7,8,8))
+v1.addedge(edge.Edge(v1,v2,8,8))
+v1.addedge(edge.Edge(v1,v7,11,11))
+v2.addedge(edge.Edge(v2,v3,7,7))
+v2.addedge(edge.Edge(v2,v8,2,2))
+v2.addedge(edge.Edge(v2,v5,4,4))
+v3.addedge(edge.Edge(v3,v4,9,9))
+v3.addedge(edge.Edge(v3,v5,14,14))
+v4.addedge(edge.Edge(v4,v5,10,10))
+v5.addedge(edge.Edge(v5,v6,2,2))
+v6.addedge(edge.Edge(v6,v7,1,1))
+v6.addedge(edge.Edge(v6,v8,6,6))
+v7.addedge(edge.Edge(v7,v8,7,7))
 #
 ##Directed test case
 #v0.addedge(graph.Edge(v0,v1,3,3))
@@ -213,12 +213,12 @@ def de_weigh(g,p_v):
 def Johnson(infile):
     g=graph.Graph()
     vs=grow_a_graph(g,infile)
-    v0=graph.Vertex(0)
+    v0=vertex.Vertex(0)
     ix=0
     for i in range(len(vs)):
         print ix
         ix+=1
-        v0.addedge(graph.Edge(v0,vs[i],0,0))
+        v0.addedge(edge.Edge(v0,vs[i],0,0))
     for e in v0.edges:
         print "v0 has edge to", e.v.v_id," with len ",e.d
     vs=[v0]+vs[1:]
