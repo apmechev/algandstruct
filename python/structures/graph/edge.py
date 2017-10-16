@@ -6,7 +6,7 @@ class Edge(object):
             self.v=v
         else:
             raise AttributeError("u or v not a vertex")
-        self.d=d
+        self._d=d
 
     @property
     def u(self):
@@ -45,7 +45,7 @@ class PositiveEdge(Edge):
 
     @d.setter
     def d(self,value):
-        if d<0:
+        if self.d<0:
             raise ValueError("Negative Edges Forbidden")
         self._d=value
 
