@@ -1,3 +1,4 @@
+
 class Edge(object):
     def __init__(self,u, v, d=float('inf')):
         from structures.graph.vertex import Vertex
